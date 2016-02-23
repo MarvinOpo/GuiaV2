@@ -77,7 +77,7 @@ public class PendingFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        rv.setAdapter(adapter);
         if(mList.size() == 0) rv.setBackgroundResource(R.drawable.no_result);
     }
 }

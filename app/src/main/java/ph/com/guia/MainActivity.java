@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void requestData(AccessToken token){
-        pd = ProgressDialog.show(this, "Loading", "Please wait...", true, false);
+        pd = ProgressDialog.show(this, "Loading", "Please wait...", true, true);
         GraphRequest request = GraphRequest.newMeRequest(token,
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override

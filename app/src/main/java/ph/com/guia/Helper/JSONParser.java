@@ -808,6 +808,7 @@ public class JSONParser {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.e("POSTLOGIN", error.getMessage());
                 MainActivity.manager.logOut();
+                MainActivity.pd.dismiss();
                 Toast.makeText(context, "Login Failed, Please try again.", Toast.LENGTH_LONG).show();
             }
         });
@@ -821,7 +822,7 @@ public class JSONParser {
                     public void onResponse(JSONObject response) {
                         Intent intent = new Intent(context, LoggedInGuide.class);
                         intent.putExtra("fb_id", RegisterActivity.fb_id);
-                        intent.putExtra("guide_id", RegisterActivity.guide_id);
+                        intent.putExtra("guide_id", "pending");
                         intent.putExtra("name", RegisterActivity.name);
                         intent.putExtra("bday", RegisterActivity.bday);
                         intent.putExtra("gender", RegisterActivity.gender);
@@ -1038,7 +1039,9 @@ public class JSONParser {
                             BitmapDrawable background = new BitmapDrawable(bitmap);
                             TravelerProfileFragment.traveler_profile_cover.setBackgroundDrawable(background);
                         }
-
+                        else if(activity.equalsIgnoreCase("MessagesCircle")) {
+                            RVadapter.cvh.message_image.setImageBitmap(bitmap);
+                        }
                     }
                 }, 0, 0, null,
                 new Response.ErrorListener() {
@@ -1111,7 +1114,7 @@ public class JSONParser {
                                 ShareLinkContent linkContent = new ShareLinkContent.Builder()
                                         .setContentTitle(response.getString("album_name"))
                                         .setContentDescription(response.getString("description"))
-                                        .setContentUrl(Uri.parse("http://guia.herokuapp.com/album?id="+response.getString("_id")))
+                                        .setContentUrl(Uri.parse("http://www.guia.com.ph/album?id="+response.getString("_id")))
                                         .setImageUrl(Uri.parse(response.getJSONArray("images").get(0).toString()))
                                         .build();
 

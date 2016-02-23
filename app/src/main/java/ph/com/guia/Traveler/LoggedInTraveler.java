@@ -38,6 +38,7 @@ import ph.com.guia.Navigation.NoConnectionFragment;
 import ph.com.guia.Navigation.PreviousFragment;
 import ph.com.guia.Navigation.RedeemFragment;
 import ph.com.guia.Navigation.SettingFragment;
+import ph.com.guia.Navigation.ShareFragment;
 import ph.com.guia.Navigation.TripFragment;
 import ph.com.guia.Navigation.TripListFragment;
 import ph.com.guia.Navigation.UpcomingFragment;
@@ -59,12 +60,12 @@ public class LoggedInTraveler extends AppCompatActivity
     public static String name, bday, gender, age, image, fb_id, user_id;
     HomeFragment hf = new HomeFragment();
     SettingFragment sf = new SettingFragment();
-    MessageFragment mf = new MessageFragment();
     FilterFragment ff = new FilterFragment();
     GuideCalendarFragment gcf = new GuideCalendarFragment();
     FragmentNewTrip fnt = new FragmentNewTrip();
     TripListFragment tlf = new TripListFragment();
     RedeemFragment rf = new RedeemFragment();
+    ShareFragment shf = new ShareFragment();
     public static FragmentManager fm;
     public static LayoutInflater inflater;
 
@@ -239,8 +240,13 @@ public class LoggedInTraveler extends AppCompatActivity
                 ft.replace(R.id.drawer_fragment_container, rf).commit();
                 break;
             case R.id.nav_messages:
+                MessageFragment mf = new MessageFragment();
                 ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.drawer_fragment_container, mf).commit();
+                break;
+            case R.id.nav_share:
+                ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.drawer_fragment_container, shf).commit();
                 break;
             case R.id.nav_settings:
                 ft = getSupportFragmentManager().beginTransaction();

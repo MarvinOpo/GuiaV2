@@ -1,5 +1,6 @@
 package ph.com.guia.Navigation;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -25,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -42,6 +44,8 @@ public class ShareFragment extends Fragment{
     ArrayList<String> photos = new ArrayList<String>();
     ShareButton shareButton;
     int id = 0;
+    boolean ok = false;
+    Uri imgUri;
 
     public static ShareDialog shareDialog;
 
@@ -107,9 +111,8 @@ public class ShareFragment extends Fragment{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         try{
-            Uri imgUri = data.getData();
+            imgUri = data.getData();
 
             switch(requestCode) {
                 case 1:
@@ -123,18 +126,12 @@ public class ShareFragment extends Fragment{
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            intent.setFlags(id-1);
+                            intent.setFlags(id - 1);
                             startActivityForResult(intent, 2);
                         }
                     });
                     linearLayout.addView(iv);
-
-                    if (new ConnectionChecker(getActivity().getApplicationContext()).isConnectedToInternet()) {
-                        Cloudinary cloudinary = new Cloudinary(Utils.cloudinaryUrlFromContext(getActivity().getApplicationContext()));
-                        File file = new File(getRealPathFromURI(imgUri));
-                        Map uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
-                        photos.add(uploadResult.get("url").toString());
-                    }
+                    ok = true;
                     break;
                 case 2:
                     int position = data.getFlags();
@@ -152,6 +149,24 @@ public class ShareFragment extends Fragment{
             cursor.moveToFirst();
             int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
             return cursor.getString(idx);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            if (new ConnectionChecker(getActivity().getApplicationContext()).isConnectedToInternet() && ok) {
+                ProgressDialog pd = ProgressDialog.show(getContext(), "Loading", "Please wait...", true, true);
+                Cloudinary cloudinary = new Cloudinary(Utils.cloudinaryUrlFromContext(getActivity().getApplicationContext()));
+                File file = new File(getRealPathFromURI(imgUri));
+                Map uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
+                photos.add(uploadResult.get("url").toString());
+                ok = false;
+                pd.dismiss();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -60,7 +60,6 @@ public class LoggedInGuide extends AppCompatActivity
     public static FragmentTransaction ft;
     HomeFragment hf = new HomeFragment();
     SettingFragment sf = new SettingFragment();
-    MessageFragment mf = new MessageFragment();
     FilterFragment ff = new FilterFragment();
     //GuideProfileFragment gpf = new GuideProfileFragment();
     GuideCalendarFragment gcf = new GuideCalendarFragment();
@@ -245,6 +244,7 @@ public class LoggedInGuide extends AppCompatActivity
                 }
                 break;
             case R.id.nav_messages:
+                MessageFragment mf = new MessageFragment();
                 ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.drawer_fragment_container, mf).commit();
                 break;

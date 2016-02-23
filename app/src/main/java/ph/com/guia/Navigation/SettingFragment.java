@@ -2,7 +2,9 @@ package ph.com.guia.Navigation;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -24,8 +27,9 @@ import ph.com.guia.Model.Constants;
 import ph.com.guia.R;
 import ph.com.guia.Traveler.LoggedInTraveler;
 
-public class SettingFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
+public class SettingFragment extends Fragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
+    TextView about, terms, policy;
     Switch alert, reminder, isTraveler;
     DBHelper db = null;
     String fb_id;
@@ -45,6 +49,13 @@ public class SettingFragment extends Fragment implements CompoundButton.OnChecke
         alert = (Switch) view.findViewById(R.id.alert_switch);
         reminder = (Switch) view.findViewById(R.id.reminder_switch);
         isTraveler = (Switch) view.findViewById(R.id.type_switch);
+        about = (TextView) view.findViewById(R.id.about);
+        terms = (TextView) view.findViewById(R.id.terms);
+        policy = (TextView) view.findViewById(R.id.policy);
+
+        about.setOnClickListener(this);
+        terms.setOnClickListener(this);
+        policy.setOnClickListener(this);
 
         try {
             if (!LoggedInGuide.fb_id.equals("")) fb_id = LoggedInGuide.fb_id;
@@ -137,5 +148,19 @@ public class SettingFragment extends Fragment implements CompoundButton.OnChecke
             }
         });
         builder.show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.about:
+                startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://www.guia.com.ph")));
+                break;
+            case R.id.terms:
+                startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://www.guia.com.ph/terms")));
+                break;
+            case R.id.policy:
+                startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://www.guia.com.ph/privacy")));
+        }
     }
 }
